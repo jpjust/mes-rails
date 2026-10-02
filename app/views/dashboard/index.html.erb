@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MES — Multi-unit Environmental Sensing</title>
+
+  <meta name="description"
+    content="MES — Rede de sensores ambientais urbanos para monitoramento de temperatura, umidade, qualidade do ar, ruído e outras variáveis ambientais.">
+
+  <style>
+    :root {
+      --primary: #0b7285;
+      --primary-dark: #075866;
+      --secondary: #20c997;
+
+      --background: #f5f8fa;
+      --surface: #ffffff;
+
+      --text: #18323a;
+      --muted: #6c7b80;
+
+      --border: #e5ecef;
+
+      --success: #2f9e44;
+      --warning: #f08c00;
+      --danger: #e03131;
+
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: var(--background);
+      color: var(--text);
+
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================
+           HEADER
+           ========================= */
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1250px;
+      margin: auto;
+
+      height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+
+      border-radius: 11px;
+
+      background:
+        linear-gradient(135deg,
+          var(--primary),
+          var(--secondary));
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: white;
+      font-weight: 800;
+      font-size: 19px;
+    }
+
+    .logo-text strong {
+      display: block;
+      font-size: 18px;
+      letter-spacing: .5px;
+    }
+
+    .logo-text span {
+      display: block;
+
+      font-size: 10px;
+      color: var(--muted);
+
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    nav {
+      display: flex;
+      gap: 28px;
+
+      font-size: 14px;
+      color: #53666c;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    /* =========================
+           HERO
+           ========================= */
+
+    .hero {
+      background:
+        radial-gradient(circle at 80% 20%,
+          rgba(32, 201, 151, .16),
+          transparent 35%),
+        linear-gradient(135deg,
+          #073b4c,
+          #0b7285);
+
+      color: white;
+    }
+
+    .hero-container {
+      max-width: 1250px;
+      margin: auto;
+
+      padding: 80px 24px 90px;
+
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+
+      gap: 60px;
+
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 5vw, 62px);
+      line-height: 1.05;
+
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span {
+      color: #63e6be;
+    }
+
+    .hero p {
+      max-width: 650px;
+
+      font-size: 18px;
+      line-height: 1.7;
+
+      color: rgba(255, 255, 255, .82);
+
+      margin-bottom: 32px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 13px 21px;
+
+      border-radius: 9px;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      transition: .2s;
+    }
+
+    .button-primary {
+      background: white;
+      color: var(--primary-dark);
+    }
+
+    .button-primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-outline {
+      border: 1px solid rgba(255, 255, 255, .35);
+      color: white;
+    }
+
+    .button-outline:hover {
+      background: rgba(255, 255, 255, .08);
+    }
+
+    /* =========================
+           NETWORK CARD
+           ========================= */
+
+    .network-card {
+      background: rgba(255, 255, 255, .09);
+
+      border: 1px solid rgba(255, 255, 255, .15);
+
+      border-radius: 20px;
+
+      padding: 26px;
+
+      backdrop-filter: blur(10px);
+    }
+
+    .network-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-bottom: 25px;
+    }
+
+    .network-card-header span {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .live {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+
+      border-radius: 50%;
+
+      background: #69db7c;
+
+      box-shadow:
+        0 0 0 5px rgba(105, 219, 124, .12);
+    }
+
+    .network-number {
+      font-size: 50px;
+      font-weight: 700;
+
+      line-height: 1;
+
+      margin-bottom: 6px;
+    }
+
+    .network-label {
+      color: rgba(255, 255, 255, .65);
+      font-size: 13px;
+    }
+
+    .network-grid {
+      margin-top: 28px;
+
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+
+      gap: 12px;
+    }
+
+    .network-stat {
+      padding: 15px;
+
+      background: rgba(0, 0, 0, .12);
+
+      border-radius: 10px;
+    }
+
+    .network-stat strong {
+      display: block;
+
+      font-size: 20px;
+    }
+
+    .network-stat span {
+      font-size: 11px;
+
+      color: rgba(255, 255, 255, .6);
+    }
+
+    /* =========================
+           MAIN
+           ========================= */
+
+    main {
+      max-width: 1250px;
+      margin: auto;
+
+      padding: 55px 24px 80px;
+    }
+
+    .section-title {
+      margin-bottom: 24px;
+    }
+
+    .section-title h2 {
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* =========================
+           METRICS
+           ========================= */
+
+    .metrics {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 18px;
+
+      margin-bottom: 55px;
+    }
+
+    .metric-card {
+      background: var(--surface);
+
+      border: 1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      padding: 22px;
+
+      box-shadow:
+        0 3px 15px rgba(20, 50, 60, .035);
+    }
+
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+
+      margin-bottom: 15px;
+    }
+
+    .metric-icon {
+      width: 40px;
+      height: 40px;
+
+      border-radius: 10px;
+
+      background: #e7f5f7;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 19px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+
+      font-size: 12px;
+      font-weight: 600;
+
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .metric-value {
+      font-size: 30px;
+      font-weight: 700;
+
+      line-height: 1.1;
+    }
+
+    .metric-value small {
+      font-size: 14px;
+      font-weight: 500;
+
+      color: var(--muted);
+    }
+
+    .metric-footer {
+      margin-top: 10px;
+
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .status {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    /* =========================
+           MAP
+           ========================= */
+
+    .dashboard-grid {
+      display: grid;
+
+      grid-template-columns:
+        1.35fr .65fr;
+
+      gap: 20px;
+
+      margin-bottom: 55px;
+    }
+
+    .panel {
+      background: white;
+
+      border: 1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 20px 22px;
+
+      border-bottom: 1px solid var(--border);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-header h3 {
+      font-size: 16px;
+    }
+
+    .panel-header span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .map {
+      height: 370px;
+
+      position: relative;
+
+      background:
+        linear-gradient(135deg,
+          #dceff1,
+          #eef6f4);
+
+      overflow: hidden;
+    }
+
+    /* Simulação visual do mapa */
+
+    .road {
+      position: absolute;
+
+      height: 7px;
+
+      background: rgba(255, 255, 255, .9);
+
+      transform: rotate(-18deg);
+
+      width: 120%;
+    }
+
+    .road:nth-child(1) {
+      top: 28%;
+      left: -10%;
+    }
+
+    .road:nth-child(2) {
+      top: 62%;
+      left: -10%;
+      transform: rotate(15deg);
+    }
+
+    .road:nth-child(3) {
+      top: 45%;
+      left: 5%;
+      transform: rotate(70deg);
+    }
+
+    .sensor {
+      position: absolute;
+
+      width: 18px;
+      height: 18px;
+
+      border-radius: 50%;
+
+      background: var(--primary);
+
+      border: 4px solid white;
+
+      box-shadow:
+        0 3px 10px rgba(0, 0, 0, .25);
+
+      cursor: pointer;
+    }
+
+    .sensor::after {
+      content: "";
+
+      position: absolute;
+
+      inset: -9px;
+
+      border-radius: 50%;
+
+      border: 1px solid rgba(11, 114, 133, .25);
+    }
+
+    .sensor-1 {
+      top: 25%;
+      left: 30%;
+    }
+
+    .sensor-2 {
+      top: 48%;
+      left: 52%;
+    }
+
+    .sensor-3 {
+      top: 68%;
+      left: 72%;
+    }
+
+    .sensor-4 {
+      top: 38%;
+      left: 78%;
+    }
+
+    .sensor-5 {
+      top: 70%;
+      left: 25%;
+    }
+
+    .map-label {
+      position: absolute;
+
+      bottom: 18px;
+      left: 18px;
+
+      padding: 8px 12px;
+
+      background: rgba(255, 255, 255, .9);
+
+      border-radius: 7px;
+
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* =========================
+           STATIONS
+           ========================= */
+
+    .stations {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .station {
+      padding: 18px 20px;
+
+      border-bottom: 1px solid var(--border);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .station:last-child {
+      border-bottom: none;
+    }
+
+    .station-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .station-dot {
+      width: 9px;
+      height: 9px;
+
+      border-radius: 50%;
+
+      background: var(--success);
+    }
+
+    .station strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .station span {
+      display: block;
+
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .station-value {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* =========================
+           VARIABLES
+           ========================= */
+
+    .variables {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 18px;
+
+      margin-bottom: 55px;
+    }
+
+    .variable {
+      background: white;
+
+      border: 1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      padding: 22px;
+    }
+
+    .variable-icon {
+      font-size: 25px;
+
+      margin-bottom: 15px;
+    }
+
+    .variable h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .variable p {
+      font-size: 13px;
+      color: var(--muted);
+
+      line-height: 1.6;
+    }
+
+    /* =========================
+           CTA
+           ========================= */
+
+    .cta {
+      background:
+        linear-gradient(135deg,
+          #073b4c,
+          #0b7285);
+
+      color: white;
+
+      border-radius: 18px;
+
+      padding: 45px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 30px;
+    }
+
+    .cta h2 {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .cta p {
+      color: rgba(255, 255, 255, .72);
+
+      max-width: 650px;
+
+      font-size: 14px;
+    }
+
+    /* =========================
+           FOOTER
+           ========================= */
+
+    footer {
+      background: #073b4c;
+
+      color: rgba(255, 255, 255, .65);
+
+      padding: 35px 24px;
+    }
+
+    .footer-container {
+      max-width: 1250px;
+
+      margin: auto;
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 20px;
+    }
+
+    .footer-brand {
+      color: white;
+      font-weight: 600;
+    }
+
+    footer p {
+      font-size: 12px;
+    }
+
+    /* =========================
+           RESPONSIVE
+           ========================= */
+
+    @media (max-width: 900px) {
+
+      .hero-container {
+        grid-template-columns: 1fr;
+        padding-top: 55px;
+      }
+
+      .metrics {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .variables {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      nav {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .variables {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 40px;
+      }
+
+      .cta {
+        padding: 30px;
+
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+
+    <div class="header-container">
+
+      <a href="#" class="logo">
+
+        <div class="logo-icon">
+          MES
+        </div>
+
+        <div class="logo-text">
+          <strong>MES</strong>
+          <span>Multi-unit Environmental Sensing</span>
+        </div>
+
+      </a>
+
+      <nav>
+        <a href="#monitoramento">Monitoramento</a>
+        <a href="#estacoes">Estações</a>
+        <a href="#variaveis">Variáveis</a>
+        <a href="#projeto">Sobre o projeto</a>
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+     HERO
+     ========================= -->
+
+  <section class="hero">
+
+    <div class="hero-container">
+
+      <div>
+
+        <h1>
+          Observando o ambiente
+          <span>em tempo real.</span>
+        </h1>
+
+        <p>
+          O MES — Multi-unit Environmental Sensing — é uma
+          rede de sensores distribuídos que coleta dados
+          ambientais em diferentes pontos da cidade,
+          permitindo acompanhar e compreender as condições
+          do ambiente urbano.
+        </p>
+
+        <div class="hero-buttons">
+
+          <a href="#monitoramento" class="button button-primary">
+
+            Explorar dados
+
+          </a>
+
+          <a href="#projeto" class="button button-outline">
+
+            Conheça o projeto
+
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <div class="network-card">
+
+        <div class="network-card-header">
+
+          <span>REDE MES</span>
+
+          <div class="live">
+
+            <div class="live-dot"></div>
+
+            Dados sendo coletados
+
+          </div>
+
+        </div>
+
+        <div class="network-number">
+          12
+        </div>
+
+        <div class="network-label">
+          unidades sensoras ativas
+        </div>
+
+        <div class="network-grid">
+
+          <div class="network-stat">
+            <strong>8</strong>
+            <span>variáveis monitoradas</span>
+          </div>
+
+          <div class="network-stat">
+            <strong>24h</strong>
+            <span>monitoramento contínuo</span>
+          </div>
+
+          <div class="network-stat">
+            <strong>156k+</strong>
+            <span>medições registradas</span>
+          </div>
+
+          <div class="network-stat">
+            <strong>5 min</strong>
+            <span>intervalo de coleta</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <main>
+
+
+    <!-- =========================
+         CURRENT CONDITIONS
+         ========================= -->
+
+    <section id="monitoramento">
+
+      <div class="section-title">
+
+        <h2>
+          Condições ambientais
+        </h2>
+
+        <p>
+          Dados mais recentes registrados pela rede MES.
+        </p>
+
+      </div>
+
+
+      <div class="metrics">
+
+        <div class="metric-card">
+
+          <div class="metric-header">
+
+            <div>
+              <div class="metric-label">
+                Temperatura
+              </div>
+            </div>
+
+            <div class="metric-icon">
+              🌡️
+            </div>
+
+          </div>
+
+          <div class="metric-value">
+            28.4 <small>°C</small>
+          </div>
+
+          <div class="metric-footer">
+            Média da rede
+            · <span class="status">● normal</span>
+          </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+          <div class="metric-header">
+
+            <div>
+              <div class="metric-label">
+                Umidade
+              </div>
+            </div>
+
+            <div class="metric-icon">
+              💧
+            </div>
+
+          </div>
+
+          <div class="metric-value">
+            68 <small>%</small>
+          </div>
+
+          <div class="metric-footer">
+            Média da rede
+            · <span class="status">● normal</span>
+          </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+          <div class="metric-header">
+
+            <div>
+              <div class="metric-label">
+                Qualidade do ar
+              </div>
+            </div>
+
+            <div class="metric-icon">
+              🌿
+            </div>
+
+          </div>
+
+          <div class="metric-value">
+            42 <small>AQI</small>
+          </div>
+
+          <div class="metric-footer">
+            Índice de qualidade
+            · <span class="status">● bom</span>
+          </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+          <div class="metric-header">
+
+            <div>
+              <div class="metric-label">
+                Ruído
+              </div>
+            </div>
+
+            <div class="metric-icon">
+              🔊
+            </div>
+
+          </div>
+
+          <div class="metric-value">
+            54 <small>dB</small>
+          </div>
+
+          <div class="metric-footer">
+            Média da rede
+            · <span class="status">● normal</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAP + STATIONS
+         ========================= -->
+
+    <section id="estacoes">
+
+      <div class="section-title">
+
+        <h2>
+          Rede de sensores
+        </h2>
+
+        <p>
+          Visualize as unidades sensoras distribuídas
+          pela área monitorada.
+        </p>
+
+      </div>
+
+
+      <div class="dashboard-grid">
+
+
+        <div class="panel">
+
+          <div class="panel-header">
+
+            <h3>
+              Mapa da rede
+            </h3>
+
+            <span>
+              12 estações
+            </span>
+
+          </div>
+
+          <div class="map">
+
+            <div class="road"></div>
+            <div class="road"></div>
+            <div class="road"></div>
+
+            <div class="sensor sensor-1"></div>
+            <div class="sensor sensor-2"></div>
+            <div class="sensor sensor-3"></div>
+            <div class="sensor sensor-4"></div>
+            <div class="sensor sensor-5"></div>
+
+            <div class="map-label">
+              Clique em uma estação para visualizar suas medições
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-header">
+
+            <h3>
+              Estações
+            </h3>
+
+            <span>
+              Status
+            </span>
+
+          </div>
+
+
+          <div class="stations">
+
+
+            <div class="station">
+
+              <div class="station-info">
+
+                <div class="station-dot"></div>
+
+                <div>
+                  <strong>MES-001</strong>
+                  <span>Centro</span>
+                </div>
+
+              </div>
+
+              <div class="station-value">
+                28.7 °C
+              </div>
+
+            </div>
+
+
+            <div class="station">
+
+              <div class="station-info">
+
+                <div class="station-dot"></div>
+
+                <div>
+                  <strong>MES-002</strong>
+                  <span>Bairro Norte</span>
+                </div>
+
+              </div>
+
+              <div class="station-value">
+                27.9 °C
+              </div>
+
+            </div>
+
+
+            <div class="station">
+
+              <div class="station-info">
+
+                <div class="station-dot"></div>
+
+                <div>
+                  <strong>MES-003</strong>
+                  <span>Campus IFBA</span>
+                </div>
+
+              </div>
+
+              <div class="station-value">
+                28.2 °C
+              </div>
+
+            </div>
+
+
+            <div class="station">
+
+              <div class="station-info">
+
+                <div class="station-dot"></div>
+
+                <div>
+                  <strong>MES-004</strong>
+                  <span>Bairro Sul</span>
+                </div>
+
+              </div>
+
+              <div class="station-value">
+                29.1 °C
+              </div>
+
+            </div>
+
+
+            <div class="station">
+
+              <div class="station-info">
+
+                <div class="station-dot"></div>
+
+                <div>
+                  <strong>MES-005</strong>
+                  <span>Zona Oeste</span>
+                </div>
+
+              </div>
+
+              <div class="station-value">
+                27.6 °C
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         VARIABLES
+         ========================= -->
+
+    <section id="variaveis">
+
+      <div class="section-title">
+
+        <h2>
+          O que monitoramos
+        </h2>
+
+        <p>
+          Diferentes variáveis ajudam a compreender
+          as condições ambientais da cidade.
+        </p>
+
+      </div>
+
+
+      <div class="variables">
+
+
+        <div class="variable">
+
+          <div class="variable-icon">
+            🌡️
+          </div>
+
+          <h3>
+            Temperatura
+          </h3>
+
+          <p>
+            Monitoramento da temperatura do ar em
+            diferentes pontos da área urbana.
+          </p>
+
+        </div>
+
+
+        <div class="variable">
+
+          <div class="variable-icon">
+            💧
+          </div>
+
+          <h3>
+            Umidade relativa
+          </h3>
+
+          <p>
+            Acompanhamento da umidade do ar e suas
+            variações ao longo do tempo.
+          </p>
+
+        </div>
+
+
+        <div class="variable">
+
+          <div class="variable-icon">
+            🌬️
+          </div>
+
+          <h3>
+            Qualidade do ar
+          </h3>
+
+          <p>
+            Coleta de parâmetros relacionados à
+            qualidade e à poluição atmosférica.
+          </p>
+
+        </div>
+
+
+        <div class="variable">
+
+          <div class="variable-icon">
+            🔊
+          </div>
+
+          <h3>
+            Poluição sonora
+          </h3>
+
+          <p>
+            Monitoramento dos níveis de pressão sonora
+            presentes no ambiente urbano.
+          </p>
+
+        </div>
+
+
+        <div class="variable">
+
+          <div class="variable-icon">
+            🌧️
+          </div>
+
+          <h3>
+            Precipitação
+          </h3>
+
+          <p>
+            Registro de eventos de chuva e de sua
+            distribuição espacial e temporal.
+          </p>
+
+        </div>
+
+
+        <div class="variable">
+
+          <div class="variable-icon">
+            📊
+          </div>
+
+          <h3>
+            Dados históricos
+          </h3>
+
+          <p>
+            Consulte séries históricas e observe como
+            as condições ambientais se modificam.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         CTA
+         ========================= -->
+
+    <section id="projeto">
+
+      <div class="cta">
+
+        <div>
+
+          <h2>
+            Explore os dados ambientais
+          </h2>
+
+          <p>
+            Consulte as medições realizadas pelas
+            unidades sensoras, compare diferentes
+            locais e acompanhe a evolução das
+            condições ambientais ao longo do tempo.
+          </p>
+
+        </div>
+
+        <a href="/dados" class="button button-primary">
+
+          Explorar dados
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+  <footer>
+
+    <div class="footer-container">
+
+      <div>
+        <div class="footer-brand">
+          MES — Multi-unit Environmental Sensing
+        </div>
+
+        <p>
+          Rede de monitoramento ambiental urbano
+        </p>
+      </div>
+
+      <p>
+        Projeto de pesquisa · IFBA
+      </p>
+
+    </div>
+
+  </footer>
+
+</body>
+
+</html>
